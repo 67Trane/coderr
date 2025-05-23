@@ -1,17 +1,11 @@
 from django.db import models
+from django.conf import settings
 
 
-class BusinessProfile(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.CharField(max_length=200)
-    orders = models.CharField(max_length=200)
-    phone = models.CharField(max_length=200)
-    reviews = models.CharField(max_length=200)
-
-
-class CustomerProfile(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.CharField(max_length=200)
-    orders = models.CharField(max_length=200)
-    phone = models.CharField(max_length=200)
-    reviews = models.CharField(max_length=200)
+class Profile(models.Model):
+    TYPES = (
+        ("business", "Business"),
+        ("customer", "Customer")
+    )
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
+    type = models.CharField(max_length=20, choices=TYPES, default="customer")
