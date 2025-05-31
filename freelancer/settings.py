@@ -28,11 +28,31 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# Erlaube nur deine lokale Angular-Origin (sicherer) oder (nur für Dev) ALLE Origins:
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5500",
+    # z. B. "http://localhost:4200" oder andere, je nachdem, wo du dein Frontend hostest.
+]
+# (Optional, falls du Hunderte dynamischer Origins hast, kannst du in DEV auch
+# CORS_ALLOW_ALL_ORIGINS = True
+# setzen, aber in Prod niemals.)
+
+# Standardmäßig deckt django-cors-headers schon Content-Type ab. 
+# Falls du eigene Custom-Headers brauchst (z. B. Authorization, X-CSRFToken, …), 
+# kannst du sie hier ergänzen:
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",
+    "x-csrftoken",
+    # … weitere Falls benötigt …
+]
+
 # Application definition
 
 INSTALLED_APPS = [
-    "users",
     "corsheaders",
+    "users",
+    
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
