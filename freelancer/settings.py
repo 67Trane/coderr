@@ -28,6 +28,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+
+#diesen bereich double check
 # Erlaube nur deine lokale Angular-Origin (sicherer) oder (nur für Dev) ALLE Origins:
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",
@@ -46,6 +49,8 @@ CORS_ALLOW_HEADERS = [
     "x-csrftoken",
     # … weitere Falls benötigt …
 ]
+#bis hier
+
 
 # Application definition
 
@@ -153,9 +158,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ]
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.TokenAuthentication',
+    # ]
 }
 
 AUTH_USER_MODEL = "users.User"

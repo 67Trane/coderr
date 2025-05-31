@@ -11,12 +11,25 @@ from rest_framework.views import APIView
 class UserView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
 
-
-class ProfileView(generics.ListCreateAPIView):
+class ProfileListView(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = [permissions.AllowAny]
+    
+class ProfileDetailView(generics.RetrieveAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes= [permissions.AllowAny]
+    
+class ProfileTypeListView(generics.ListAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.AllowAny]
+    
+    def get_queryset(self):
+        profile_type = self.kwargs.get("profile_type")
+        return Profile.objects.filter(user__type=profile_type)
 
 
 class RegistrationView(generics.CreateAPIView):
@@ -27,7 +40,10 @@ class RegistrationView(generics.CreateAPIView):
         serializer = RegistrationSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save()
+            new_user = serializer.save()
+            Profile.objects.create(user=new_user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
