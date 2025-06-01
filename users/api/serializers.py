@@ -14,10 +14,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email", read_only=True)
     type = serializers.CharField(source="user.type", read_only=True)
     user_id = serializers.IntegerField(source="id", read_only=True)
+    date_joined = serializers.DateTimeField(source="user.date_joined", read_only=True)
 
     class Meta:
-        model = User
-        fields = ['username', 'email', 'type', 'user_id']
+        model = Profile
+        fields = ['username', 'email', 'type', 'user_id', 'date_joined',]
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
