@@ -37,7 +37,7 @@ CORS_ALLOWED_ORIGINS = [
     # z. B. "http://localhost:4200" oder andere, je nachdem, wo du dein Frontend hostest.
 ]
 # (Optional, falls du Hunderte dynamischer Origins hast, kannst du in DEV auch
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
 # setzen, aber in Prod niemals.)
 
 # Standardmäßig deckt django-cors-headers schon Content-Type ab. 
@@ -57,7 +57,6 @@ CORS_ALLOW_HEADERS = [
 INSTALLED_APPS = [
     "corsheaders",
     "users",
-    
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -156,11 +155,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ],
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.TokenAuthentication',
-    # ]
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        "rest_framework.authentication.SessionAuthentication",
+    ]
 }
 
 AUTH_USER_MODEL = "users.User"

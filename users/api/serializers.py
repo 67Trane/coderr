@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from users.models import User, Profile
 from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -39,3 +40,29 @@ class RegistrationSerializer(serializers.ModelSerializer):
         token, _ = Token.objects.get_or_create(user=user)
         user.token = token.key
         return user
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+    token = serializers.CharField(read_only=True)
+
+    def validate(self, data):
+        username = data.get("username")
+        password = data.get("password")
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user:
+                if not user.is_active:
+                    raise serializers.ValidationError(
+                        "Benutzerkonto is deaktiviert.")
+                token_obj, _ = Token.objects.get_or_create(user=user)
+                data["token"] = token_obj.key
+                return data
+            else:
+                raise serializers.ValidationError(
+                    "Ungültiger Benutzername oder Passwort")
+        else:
+            raise serializers.ValidationError(
+                "Beide Felder (username, password) sind erfolderlich.")
