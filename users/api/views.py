@@ -6,7 +6,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework.views import APIView
-from rest_framework.authtoken.views import ObtainAuthToken
 from django.contrib.auth import authenticate
 
 
@@ -30,10 +29,17 @@ class ProfileListView(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
 
 
-class ProfileDetailView(generics.RetrieveAPIView):
+class ProfileDetailView(generics.RetrieveUpdateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = [permissions.AllowAny]
+    
+    def get_object(self):
+        obj=super().get_object()
+        if obj.user != self.request.user:
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("Du darfst nur dein eigenes Profil sehen b.z.w bearbeiten")
+        return obj
 
 
 class ProfileTypeListView(generics.ListAPIView):
@@ -62,7 +68,6 @@ class RegistrationView(generics.CreateAPIView):
 
 class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
-
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -73,6 +78,7 @@ class LoginView(APIView):
             return Response({
                 "token": token,
                 "user_id": user.id,
-                "username": user.username
+                "username": user.username,
+                "email": user.email
             }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

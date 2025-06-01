@@ -11,15 +11,42 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = serializers.IntegerField(source="user.id", read_only=True)
     username = serializers.CharField(source="user.username", read_only=True)
-    email = serializers.EmailField(source="user.email", read_only=True)
+    email = serializers.EmailField(source="user.email")
     type = serializers.CharField(source="user.type", read_only=True)
-    user_id = serializers.IntegerField(source="id", read_only=True)
-    date_joined = serializers.DateTimeField(source="user.date_joined", read_only=True)
-
+    first_name = serializers.CharField(source="user.first_name", required=False)
+    last_name = serializers.CharField(source="user.last_name", required=False)
+    created_at = serializers.DateTimeField(source="user.date_joined", read_only=True)
+    
+    file = serializers.ImageField(required=False, allow_null=True)
+    location = serializers.CharField(required=False, allow_null=True)
+    tel = serializers.CharField(required=False, allow_null=True)
+    description = serializers.CharField(required=False, allow_null=True)
+    working_hours = serializers.IntegerField(required=False)
+    
     class Meta:
         model = Profile
-        fields = ['username', 'email', 'type', 'user_id', 'date_joined',]
+        fields = ['user', 'username', 'first_name', 'last_name', 'file', 'location', 'tel', 'description', 'working_hours', 'type', 'email', 'created_at']
+
+
+# class SingleProfileSerializer(serializers.ModelSerializer):
+    
+#     username = serializers.CharField(source="user.username", read_only=True)
+    
+   
+#     location = serializers.CharField() 
+#     tel = serializers.IntegerField()
+#     description = serializers.CharField()
+#     working_hours = serializers.IntegerField()
+#     type = serializers.CharField(source="user.type", read_only=True)
+#     email = serializers.EmailField(source="user.email", read_only=True)
+#     created_at = serializers.DateTimeField(source="user.date_joined", read_only=True)
+    
+
+#     class Meta:
+#         model = Profile
+#         fields = ['username', 'email', 'type', 'user', 'date_joined',]
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

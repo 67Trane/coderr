@@ -43,12 +43,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # Standardmäßig deckt django-cors-headers schon Content-Type ab. 
 # Falls du eigene Custom-Headers brauchst (z. B. Authorization, X-CSRFToken, …), 
 # kannst du sie hier ergänzen:
-CORS_ALLOW_HEADERS = [
-    "content-type",
-    "authorization",
-    "x-csrftoken",
-    # … weitere Falls benötigt …
-]
+
 #bis hier
 
 
