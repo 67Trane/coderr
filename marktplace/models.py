@@ -31,4 +31,9 @@ class Order(models.Model):
 
 
 class Offer(models.Model):
-    pass
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="offers", on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    image = models.ImageField(upload_to="offer_images/", null= True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
