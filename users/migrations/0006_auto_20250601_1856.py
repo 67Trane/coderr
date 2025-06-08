@@ -1,5 +1,6 @@
 from django.db import migrations, transaction, IntegrityError
 from django.contrib.auth.hashers import make_password
+import secrets
 
 
 def create_guest_users(apps, schema_editor):
@@ -7,10 +8,10 @@ def create_guest_users(apps, schema_editor):
     Profile = apps.get_model("users", "Profile")
     Token = apps.get_model("authtoken", "Token")
 
-    # Gast-Accounts Daten
+    # Gast-Accounts definieren
     guests = [
-        {"username": "andrey", "email": "guest_customer@example.com", "type": "customer", "password": "asdasd"},
         {"username": "kevin", "email": "guest_business@example.com", "type": "business", "password": "asdasd24"},
+        {"username": "andrey", "email": "guest_customer@example.com", "type": "customer", "password": "asdasd"},
     ]
 
     for info in guests:
@@ -26,13 +27,17 @@ def create_guest_users(apps, schema_editor):
         )
         # Token nur anlegen, wenn noch keiner existiert
         if not Token.objects.filter(user=guest).exists():
-            try:
-                with transaction.atomic():
-                    Token.objects.create(user=guest)
-            except IntegrityError:
-                # Bei Key-Kollision wird Savepoint zurückgerollt, Migration läuft weiter
-                pass
-        # Profil anlegen, falls nicht vorhanden
+            # Manuelle Key-Generierung mit Kollision-Abfang
+            for _ in range(5):
+                key = secrets.token_hex(20)
+                try:
+                    with transaction.atomic():
+                        Token.objects.create(user=guest, key=key)
+                    break
+                except IntegrityError:
+                    # bei Kollision: nächsten Versuch
+                    continue
+        # Profil sicherstellen
         Profile.objects.get_or_create(user=guest)
 
 
