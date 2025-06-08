@@ -1,56 +1,39 @@
-# users/migrations/0006_auto_create_guest_users.py
-
-from django.db import migrations, IntegrityError, transaction
+from django.db import migrations, transaction, IntegrityError
 from django.contrib.auth.hashers import make_password
 
 
 def create_guest_users(apps, schema_editor):
-    User    = apps.get_model("users", "User")
+    User = apps.get_model("users", "User")
     Profile = apps.get_model("users", "Profile")
-    Token   = apps.get_model("authtoken", "Token")
+    Token = apps.get_model("authtoken", "Token")
 
-    # 1) Gast-Business anlegen oder updaten
-    guest_biz, _ = User.objects.update_or_create(
-        username="kevin",
-        defaults={
-            "email": "guest_business@example.com",
-            "type": "business",
-            "password": make_password("asdasd24"),
-            "is_active": True,
-        }
-    )
-    # Token‐Erzeugung in einem separaten Savepoint:
-    try:
-        with transaction.atomic():
-            Token.objects.create(user=guest_biz)
-    except IntegrityError:
-        # Falls zufällig genau derselbe Key generiert wurde, 
-        # wird nur dieser Savepoint zurückgerollt, 
-        # und die Migration insgesamt kann weitermachen.
-        pass
+    # Gast-Accounts Daten
+    guests = [
+        {"username": "andrey", "email": "guest_customer@example.com", "type": "customer", "password": "asdasd"},
+        {"username": "kevin", "email": "guest_business@example.com", "type": "business", "password": "asdasd24"},
+    ]
 
-    # Profil für Business-Gast (leg“e nur einmal” an)
-    Profile.objects.get_or_create(user=guest_biz)
-
-
-    # 2) Gast-Customer anlegen oder updaten
-    guest_cust, _ = User.objects.update_or_create(
-        username="andrey",
-        defaults={
-            "email": "guest_customer@example.com",
-            "type": "customer",
-            "password": make_password("asdasd"),
-            "is_active": True,
-        }
-    )
-    # Ebenfalls in einem eigenen Savepoint:
-    try:
-        with transaction.atomic():
-            Token.objects.create(user=guest_cust)
-    except IntegrityError:
-        pass
-
-    Profile.objects.get_or_create(user=guest_cust)
+    for info in guests:
+        # User anlegen oder updaten
+        guest, _ = User.objects.update_or_create(
+            username=info["username"],
+            defaults={
+                "email": info["email"],
+                "type": info["type"],
+                "password": make_password(info["password"]),
+                "is_active": True,
+            }
+        )
+        # Token nur anlegen, wenn noch keiner existiert
+        if not Token.objects.filter(user=guest).exists():
+            try:
+                with transaction.atomic():
+                    Token.objects.create(user=guest)
+            except IntegrityError:
+                # Bei Key-Kollision wird Savepoint zurückgerollt, Migration läuft weiter
+                pass
+        # Profil anlegen, falls nicht vorhanden
+        Profile.objects.get_or_create(user=guest)
 
 
 class Migration(migrations.Migration):
