@@ -1,9 +1,11 @@
 from rest_framework import generics, status
+from django.db.models import Q
 from marktplace.models import *
 from .serializers import *
 from rest_framework import permissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from .pagination import StandardResultsSetPagination
 
 
 class OrderListView(generics.ListCreateAPIView):
@@ -37,6 +39,34 @@ class OrderListView(generics.ListCreateAPIView):
 
 
 class OffersListView(generics.ListCreateAPIView):
+    queryset = Offer.objects.all()
+    serializer_class = OfferSerializer
+    permission_classes = [permissions.AllowAny]
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        params = self.request.query_params
+
+        creator_id = params.get('creator_id')
+        if creator_id:
+            qs = qs.filter(business_user_id=creator_id)
+
+        search = params.get('search')
+        if search:
+            qs = qs.filter(
+                Q(title__icontains=search) |
+                Q(description__icontains=search)
+            )
+
+        ordering = params.get('ordering')
+        if ordering:
+            qs = qs.order_by(ordering)
+
+        return qs
+
+
+class OfferDetailView(generics.RetrieveAPIView):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
     permission_classes = [permissions.AllowAny]

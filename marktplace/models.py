@@ -31,7 +31,10 @@ class Order(models.Model):
 
 
 class Offer(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="offers", on_delete=models.CASCADE)
+    customer_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, 
+                                      related_name='offer_as_customer', limit_choices_to={'type': 'customer'})
+    business_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, 
+                                      related_name='offer_as_business', limit_choices_to={'type': 'business'})
     title = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(upload_to="offer_images/", null= True, blank=True)
     description = models.TextField(null=True, blank=True)
