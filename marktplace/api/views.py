@@ -66,7 +66,13 @@ class OffersListView(generics.ListCreateAPIView):
         return qs
 
 
-class OfferDetailView(generics.RetrieveAPIView):
+class SingleOfferView(generics.RetrieveAPIView):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
+    permission_classes = [permissions.AllowAny]
+    
+    
+class OfferDetailView(generics.ListCreateAPIView):
+    queryset = OfferDetail.objects.all()
+    serializer_class = OfferDetailSerializer
     permission_classes = [permissions.AllowAny]
