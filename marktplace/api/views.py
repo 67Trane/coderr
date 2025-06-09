@@ -62,6 +62,8 @@ class OffersListView(generics.ListCreateAPIView):
         ordering = params.get('ordering')
         if ordering:
             qs = qs.order_by(ordering)
+        else:
+            qs = qs.order_by('-created_at')
 
         return qs
 
@@ -72,7 +74,7 @@ class SingleOfferView(generics.RetrieveAPIView):
     permission_classes = [permissions.AllowAny]
     
     
-class OfferDetailView(generics.ListCreateAPIView):
+class OfferDetailView(generics.RetrieveAPIView):
     queryset = OfferDetail.objects.all()
     serializer_class = OfferDetailSerializer
     permission_classes = [permissions.AllowAny]

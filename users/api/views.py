@@ -34,12 +34,14 @@ class ProfileDetailView(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [permissions.AllowAny]
     
-    def get_object(self):
-        obj=super().get_object()
-        if obj.user != self.request.user:
-            from rest_framework.exceptions import PermissionDenied
-            raise PermissionDenied("Du darfst nur dein eigenes Profil sehen b.z.w bearbeiten")
-        return obj
+    # def get_object(self):
+    #     obj=super().get_object()
+    #     if obj.user != self.request.user:
+    #         from rest_framework.exceptions import PermissionDenied
+    #         raise PermissionDenied("Du darfst nur dein eigenes Profil sehen b.z.w bearbeiten")
+    #     return obj
+
+
 
 
 class ProfileTypeListView(generics.ListAPIView):
