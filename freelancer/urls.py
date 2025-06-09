@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/', include('users.api.urls')),
     path('api/', include('marktplace.api.urls')),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path('api/', include('reviews.api.urls')),
 ]
