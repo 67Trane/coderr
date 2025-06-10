@@ -29,11 +29,13 @@ class OfferDetailSerializer(serializers.ModelSerializer):
 
 class OfferSerializer(serializers.ModelSerializer):
     details = OfferDetailSerializer(many=True)
+    user = serializers.IntegerField(source='business_user.id', read_only=True)
 
     class Meta:
         model = Offer
         fields = [
             "id",
+            "user",
             "title", "description",
             "created_at", "updated_at",
             "image", "customer_user", "business_user", "details",
