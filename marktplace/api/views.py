@@ -39,10 +39,13 @@ class OrderListView(generics.ListCreateAPIView):
 
 
 class OffersListView(generics.ListCreateAPIView):
-    queryset = Offer.objects.all()
+    queryset = Offer.objects.prefetch_related('details').all()
     serializer_class = OfferSerializer
     permission_classes = [permissions.AllowAny]
     pagination_class = StandardResultsSetPagination
+
+    def perform_create(self, serializer):
+        serializer.save(business_user=self.request.user)
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -72,9 +75,13 @@ class SingleOfferView(generics.RetrieveAPIView):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
     permission_classes = [permissions.AllowAny]
-    
-    
+
+
 class OfferDetailView(generics.RetrieveAPIView):
     queryset = OfferDetail.objects.all()
     serializer_class = OfferDetailSerializer
     permission_classes = [permissions.AllowAny]
+    
+    
+
+

@@ -2,7 +2,6 @@ from rest_framework import serializers
 from marktplace.models import *
 
 
-
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -12,19 +11,47 @@ class OrderSerializer(serializers.ModelSerializer):
 class OfferDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = OfferDetail
-        fields = '__all__'
-        
+        fields = [
+            'id',
+            'title',
+            'revisions',
+            'delivery_time_in_days',
+            'price',
+            'features',
+            'offer_type',
+        ]
+
 
 class OfferSerializer(serializers.ModelSerializer):
-    details = OfferDetailSerializer(many=True, read_only=True)
-    user = serializers.IntegerField(source='business_user_id', read_only=True)
+    details = OfferDetailSerializer(many=True)
+
     class Meta:
         model = Offer
         fields = [
-            "id", "user",
+            "id",
             "title", "description",
             "created_at", "updated_at",
             "image", "customer_user", "business_user", "details",
         ]
 
+    def create(self, validated_data):
+        details_data = validated_data.pop('details', [])
+        offer = Offer.objects.create(**validated_data)
+        for detail in details_data:
+            OfferDetail.objects.create(offer=offer, **detail)
+        return offer
 
+    def update(self, instance, validated_data):
+        details_data = validated_data.pop('details', None)
+
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        if details_data is not None:
+            instance.details.all().delete()
+            for detail in details_data:
+                OfferDetail.objects.create(offer=instance, **detail)
+
+        return instance
