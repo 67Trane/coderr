@@ -16,8 +16,8 @@ class OfferDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = OfferDetail
         fields = [
-            'url',
             'id',
+            'url',
             'title',
             'revisions',
             'delivery_time_in_days',
@@ -28,12 +28,7 @@ class OfferDetailSerializer(serializers.ModelSerializer):
 
 
 class OfferSerializer(serializers.ModelSerializer):
-    details = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='offerdetails-details',
-        lookup_field='pk'
-    )
+    details = OfferDetailSerializer(many=True)
 
     class Meta:
         model = Offer
@@ -54,9 +49,8 @@ class OfferSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         details_data = validated_data.pop('details', None)
 
-
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+        for attr, val in validated_data.items():
+            setattr(instance, attr, val)
         instance.save()
 
         if details_data is not None:
