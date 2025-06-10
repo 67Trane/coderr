@@ -9,9 +9,14 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OfferDetailSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='offerdetails-details',
+        lookup_field='pk'
+    )
     class Meta:
         model = OfferDetail
         fields = [
+            'url',
             'id',
             'title',
             'revisions',
@@ -23,7 +28,12 @@ class OfferDetailSerializer(serializers.ModelSerializer):
 
 
 class OfferSerializer(serializers.ModelSerializer):
-    details = OfferDetailSerializer(many=True)
+    details = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='offerdetails-details',
+        lookup_field='pk'
+    )
 
     class Meta:
         model = Offer
