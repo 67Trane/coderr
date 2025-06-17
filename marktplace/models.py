@@ -14,24 +14,6 @@ STATUS_TYPES = (
 )
 
 
-class Order(models.Model):
-
-    customer_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-                                      related_name='orders_as_customer', limit_choices_to={'type': 'customer'})
-    business_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-                                      related_name='orders_as_business', limit_choices_to={'type': 'business'})
-    title = models.CharField(max_length=200)
-    revisions = models.PositiveIntegerField(default=0)
-    delivery_time_in_days = models.IntegerField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    features = models.JSONField(default=list, blank=True)
-    offer_type = models.CharField(max_length=10, choices=OFFER_TYPES)
-    status = models.CharField(
-        max_length=15, choices=STATUS_TYPES, default='in_progress')
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
 class Offer(models.Model):
     customer_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True,
                                       related_name='offer_as_customer', limit_choices_to={'type': 'customer'})
@@ -43,7 +25,6 @@ class Offer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
 class OfferDetail(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE, related_name="details")
     title = models.CharField(max_length=255, null=True, blank=True)
@@ -52,4 +33,21 @@ class OfferDetail(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     features = models.JSONField(default=list, blank=True)
     offer_type = models.CharField(max_length=10, choices=OFFER_TYPES)
+    business_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True,
+                                      related_name='business_user', limit_choices_to={'type': 'business'})
+
+class Order(models.Model):
+
+    customer_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+                                      related_name='orders_as_customer', limit_choices_to={'type': 'customer'})
+    business_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+                                      related_name='orders_as_business', limit_choices_to={'type': 'business'})
+    offer_detail_id = models.ForeignKey(OfferDetail, on_delete=models.CASCADE, related_name='offer_detail',)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+
+
+
     

@@ -18,12 +18,15 @@ class OrderListView(generics.ListCreateAPIView):
         if offer_detail_id is None:
             return Response({"detail": "offer_detail_id fehlt."}, status=status.HTTP_400_BAD_REQUEST)
 
-        offer_detail = get_object_or_404(Offer, pk=offer_detail_id)
+        offer_detail = get_object_or_404(OfferDetail, pk=offer_detail_id)
         user = request.user
         if not hasattr(user, "type") or user.type != "customer":
             return Response({"detail": "Nur Customer dürfen bestellen"}, status=status.HTTP_403_FORBIDDEN)
+        
+        print(f"business_user: {offer_detail.business_user}")
 
         new_order = Order.objects.create(
+            
             customer_user=user,
             business_user=offer_detail.business_user,
             title=offer_detail.title,
@@ -81,7 +84,3 @@ class OfferDetailView(generics.RetrieveAPIView):
     queryset = OfferDetail.objects.all()
     serializer_class = OfferDetailSerializer
     permission_classes = [permissions.AllowAny]
-    
-    
-
-

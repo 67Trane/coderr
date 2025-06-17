@@ -24,6 +24,7 @@ class OfferDetailSerializer(serializers.ModelSerializer):
             'price',
             'features',
             'offer_type',
+            'business_user',
         ]
 
 

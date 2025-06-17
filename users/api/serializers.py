@@ -35,10 +35,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         user_data = validated_data.pop("user", {})
 
-        # Wenn z. B. first_name, last_name oder email in user_data drin sind, updaten wir den User
         if user_data:
             user = instance.user
-            # Beispiel: user_data könnte {'first_name': 'NeuerVorname', 'last_name': 'NeuerNachname', 'email': 'neue@adresse.de'}
+
             first_name = user_data.get("first_name", None)
             last_name = user_data.get("last_name", None)
             email = user_data.get("email", None)
@@ -52,32 +51,11 @@ class ProfileSerializer(serializers.ModelSerializer):
 
             user.save()
 
-        # Nun kümmern wir uns um die verbleibenden Profile-Felder
-        # validated_data enthält jetzt nur noch: file, location, tel, description, working_hours (sofern übergeben)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
         instance.save()
         return instance
-
-
-# class SingleProfileSerializer(serializers.ModelSerializer):
-
-#     username = serializers.CharField(source="user.username", read_only=True)
-
-
-#     location = serializers.CharField()
-#     tel = serializers.IntegerField()
-#     description = serializers.CharField()
-#     working_hours = serializers.IntegerField()
-#     type = serializers.CharField(source="user.type", read_only=True)
-#     email = serializers.EmailField(source="user.email", read_only=True)
-#     created_at = serializers.DateTimeField(source="user.date_joined", read_only=True)
-
-
-#     class Meta:
-#         model = Profile
-#         fields = ['username', 'email', 'type', 'user', 'date_joined',]
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
