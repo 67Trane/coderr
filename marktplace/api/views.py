@@ -13,32 +13,15 @@ class OrderListView(generics.ListCreateAPIView):
     serializer_class = OrderSerializer
     permission_classes = [permissions.AllowAny]
 
-    def create(self, request, *args, **kwargs):
-        offer_detail_id = request.data.get("offer_detail_id")
-        if offer_detail_id is None:
-            return Response({"detail": "offer_detail_id fehlt."}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, *args, **kwargs):
+        # Eingabe-Serializer validieren und Order erzeugen
+        create_serializer = self.get_serializer(data=request.data, context={'request': request})
+        create_serializer.is_valid(raise_exception=True)
+        order = create_serializer.save()
 
-        offer_detail = get_object_or_404(OfferDetail, pk=offer_detail_id)
-        user = request.user
-        if not hasattr(user, "type") or user.type != "customer":
-            return Response({"detail": "Nur Customer dürfen bestellen"}, status=status.HTTP_403_FORBIDDEN)
-        
-        print(f"business_user: {offer_detail.business_user}")
-
-        new_order = Order.objects.create(
-            
-            customer_user=user,
-            business_user=offer_detail.business_user,
-            title=offer_detail.title,
-            revisions=offer_detail.revisions,
-            delivery_time_in_days=offer_detail.delivery_time_in_days,
-            price=offer_detail.price,
-            features=offer_detail.features,
-            offer_type=offer_detail.offer_type,
-        )
-
-        serializer = self.get_serializer(new_order)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # Ausgabe-Serializer, um alle Felder zurückzugeben
+        output_serializer = OrderSerializer(order)
+        return Response(output_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class OffersListView(generics.ListCreateAPIView):
