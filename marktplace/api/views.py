@@ -22,6 +22,16 @@ class OrderListView(generics.ListCreateAPIView):
         # Ausgabe-Serializer, um alle Felder zurückzugeben
         output_serializer = OrderSerializer(order)
         return Response(output_serializer.data, status=status.HTTP_201_CREATED)
+    
+class OrderDetailView(generics.RetrieveAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, pk, *args, **kwargs):
+        order = get_object_or_404(Order, pk=pk)
+        serializer = self.get_serializer(order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class OffersListView(generics.ListCreateAPIView):
@@ -67,3 +77,29 @@ class OfferDetailView(generics.RetrieveAPIView):
     queryset = OfferDetail.objects.all()
     serializer_class = OfferDetailSerializer
     permission_classes = [permissions.AllowAny]
+
+
+class OrderCountView(generics.RetrieveAPIView):
+    permission_classes = [permissions.AllowAny]
+    def get(self, request, pk,):
+        count  = Order.objects.filter(business_user=pk).count()
+        data = {
+            "order_count": count
+        }
+        
+        return Response(data, status=status.HTTP_200_OK)    
+    
+
+    
+class OrderCompletedView(generics.RetrieveAPIView):
+    permission_classes = [permissions.AllowAny]
+    def get(self, request, pk,):
+        current_user  = Order.objects.filter(business_user=pk)
+        count = current_user.filter(status='completed').count()
+        data = {
+            "completed_order_count": count
+        }
+        
+        return Response(data, status=status.HTTP_200_OK)    
+    
+    

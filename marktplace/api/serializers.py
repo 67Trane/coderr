@@ -4,7 +4,7 @@ from marktplace.models import *
 
 class OrderSerializer(serializers.ModelSerializer):
     offer_detail_id = serializers.IntegerField(write_only=True)
-
+      
     def validate_offer_detail_id(self, value):
         try:
             return OfferDetail.objects.get(pk=value)
@@ -18,7 +18,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
         order = Order.objects.create(
             customer_user=user,
-            business_user=offer_detaiL.business_user,
+            business_user=offer_detaiL.offer.business_user,
             title=offer_detaiL.title,
             revisions=offer_detaiL.revisions,
             delivery_time_in_days=offer_detaiL.delivery_time_in_days,
@@ -91,3 +91,4 @@ class OfferSerializer(serializers.ModelSerializer):
                 OfferDetail.objects.create(offer=instance, **detail)
 
         return instance
+

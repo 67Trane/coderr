@@ -38,9 +38,9 @@ class OfferDetail(models.Model):
 
 class Order(models.Model):
     customer_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-                                      related_name='orders_as_customer', limit_choices_to={'type': 'customer'})
+                                      related_name='orders_as_customer', limit_choices_to={'type': 'customer'}, blank=True, null=True)
     business_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-                                      related_name='orders_as_business', limit_choices_to={'type': 'business'})
+                                      related_name='orders_as_business', limit_choices_to={'type': 'business'}, blank=True, null=True)
     title = models.CharField(max_length=255, null=True, blank=True)
     revisions = models.PositiveIntegerField(default=0)
     delivery_time_in_days = models.IntegerField( null=True, blank=True)
