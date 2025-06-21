@@ -28,9 +28,12 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# diesen bereich double check
+from corsheaders.defaults import default_methods
 
+CORS_ALLOW_METHODS = list(default_methods)
+# -> ['DELETE','GET','OPTIONS','PATCH','POST','PUT']
 
-#diesen bereich double check
 # Erlaube nur deine lokale Angular-Origin (sicherer) oder (nur für Dev) ALLE Origins:
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",
@@ -40,11 +43,11 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_ALL_ORIGINS = True
 # setzen, aber in Prod niemals.)
 
-# Standardmäßig deckt django-cors-headers schon Content-Type ab. 
-# Falls du eigene Custom-Headers brauchst (z. B. Authorization, X-CSRFToken, …), 
+# Standardmäßig deckt django-cors-headers schon Content-Type ab.
+# Falls du eigene Custom-Headers brauchst (z. B. Authorization, X-CSRFToken, …),
 # kannst du sie hier ergänzen:
 
-#bis hier
+# bis hier
 
 
 # Application definition
@@ -59,7 +62,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    'rest_framework.authtoken',
+    "rest_framework.authtoken",
     "marktplace",
     "reviews",
 ]
@@ -149,11 +152,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
 }

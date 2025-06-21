@@ -1,6 +1,11 @@
 from rest_framework import viewsets
 from users.models import User, Profile
-from .serializers import UserSerializer, RegistrationSerializer, ProfileSerializer, LoginSerializer
+from .serializers import (
+    UserSerializer,
+    RegistrationSerializer,
+    ProfileSerializer,
+    LoginSerializer,
+)
 from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -33,15 +38,13 @@ class ProfileDetailView(generics.RetrieveUpdateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = [permissions.AllowAny]
-    
+
     # def get_object(self):
     #     obj=super().get_object()
     #     if obj.user != self.request.user:
     #         from rest_framework.exceptions import PermissionDenied
     #         raise PermissionDenied("Du darfst nur dein eigenes Profil sehen b.z.w bearbeiten")
     #     return obj
-
-
 
 
 class ProfileTypeListView(generics.ListAPIView):
@@ -70,17 +73,22 @@ class RegistrationView(generics.CreateAPIView):
 
 class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.validated_data["username"]
-            user = authenticate(username=username,
-                                password=request.data.get("password"))
+            user = authenticate(
+                username=username, password=request.data.get("password")
+            )
             token = serializer.validated_data["token"]
-            return Response({
-                "token": token,
-                "user_id": user.id,
-                "username": user.username,
-                "email": user.email
-            }, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "token": token,
+                    "user_id": user.id,
+                    "username": user.username,
+                    "email": user.email,
+                },
+                status=status.HTTP_200_OK,
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

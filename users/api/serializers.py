@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = "__all__"
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -15,11 +15,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source="user.username", read_only=True)
     email = serializers.EmailField(source="user.email")
     type = serializers.CharField(source="user.type", read_only=True)
-    first_name = serializers.CharField(
-        source="user.first_name", required=False)
+    first_name = serializers.CharField(source="user.first_name", required=False)
     last_name = serializers.CharField(source="user.last_name", required=False)
-    created_at = serializers.DateTimeField(
-        source="user.date_joined", read_only=True)
+    created_at = serializers.DateTimeField(source="user.date_joined", read_only=True)
 
     file = serializers.ImageField(required=False, allow_null=True)
     location = serializers.CharField(required=False, allow_null=True)
@@ -29,8 +27,20 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ['user', 'username', 'first_name', 'last_name', 'file', 'location',
-                  'tel', 'description', 'working_hours', 'type', 'email', 'created_at']
+        fields = [
+            "user",
+            "username",
+            "first_name",
+            "last_name",
+            "file",
+            "location",
+            "tel",
+            "description",
+            "working_hours",
+            "type",
+            "email",
+            "created_at",
+        ]
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop("user", {})
@@ -65,7 +75,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'type', 'user_id', 'password', 'token']
+        fields = ["username", "email", "type", "user_id", "password", "token"]
 
     def create(self, validated_data):
         pwd = validated_data.pop("password")
@@ -91,14 +101,15 @@ class LoginSerializer(serializers.Serializer):
             user = authenticate(username=username, password=password)
             if user:
                 if not user.is_active:
-                    raise serializers.ValidationError(
-                        "Benutzerkonto is deaktiviert.")
+                    raise serializers.ValidationError("Benutzerkonto is deaktiviert.")
                 token_obj, _ = Token.objects.get_or_create(user=user)
                 data["token"] = token_obj.key
                 return data
             else:
                 raise serializers.ValidationError(
-                    "Ungültiger Benutzername oder Passwort")
+                    "Ungültiger Benutzername oder Passwort"
+                )
         else:
             raise serializers.ValidationError(
-                "Beide Felder (username, password) sind erfolderlich.")
+                "Beide Felder (username, password) sind erfolderlich."
+            )

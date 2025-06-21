@@ -10,8 +10,18 @@ def create_guest_users(apps, schema_editor):
 
     # Gast-Accounts definieren
     guests = [
-        {"username": "kevin", "email": "guest_business@example.com", "type": "business", "password": "asdasd24"},
-        {"username": "andrey", "email": "guest_customer@example.com", "type": "customer", "password": "asdasd"},
+        {
+            "username": "kevin",
+            "email": "guest_business@example.com",
+            "type": "business",
+            "password": "asdasd24",
+        },
+        {
+            "username": "andrey",
+            "email": "guest_customer@example.com",
+            "type": "customer",
+            "password": "asdasd",
+        },
     ]
 
     for info in guests:
@@ -23,7 +33,7 @@ def create_guest_users(apps, schema_editor):
                 "type": info["type"],
                 "password": make_password(info["password"]),
                 "is_active": True,
-            }
+            },
         )
         # Token nur anlegen, wenn noch keiner existiert
         if not Token.objects.filter(user=guest).exists():
@@ -44,8 +54,8 @@ def create_guest_users(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("users",    "0005_guestbusiness_guestcustomer"),
-        ("authtoken","0001_initial"),
+        ("users", "0005_guestbusiness_guestcustomer"),
+        ("authtoken", "0001_initial"),
     ]
 
     operations = [
