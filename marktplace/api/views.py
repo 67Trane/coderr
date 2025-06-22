@@ -5,7 +5,10 @@ from .serializers import *
 from rest_framework import permissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
 from .pagination import StandardResultsSetPagination
+from reviews.models import Review
+from users.models import Profile
 
 
 class OrderListView(generics.ListCreateAPIView):
@@ -107,4 +110,24 @@ class OrderCompletedView(generics.RetrieveAPIView):
         count = current_user.filter(status="completed").count()
         data = {"completed_order_count": count}
 
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class BaseInfos(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+
+    def get(self, request):
+        review_count = Review.objects.count()
+        avg = Review.objects.aggregate(average_rating=models.Avg("rating"))["average_rating"] or 0
+        business_profile_count = Profile.objects.filter(user__type="business").count()
+        offer_count = Offer.objects.count()
+        
+        
+        data = {
+            "review_count": review_count,
+            "average_rating": avg,
+            "business_profile_count": business_profile_count,
+            "offer_count": offer_count,
+        }
         return Response(data, status=status.HTTP_200_OK)

@@ -19,6 +19,5 @@ urlpatterns = [
         name="profile-by-type",
     ),
     path("registration/", RegistrationView.as_view(), name="registration"),
-    path("base-info/", UserDetailView.as_view(), name="user"),
     path("login/", LoginView.as_view(), name="login"),
 ]
