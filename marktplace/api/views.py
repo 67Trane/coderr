@@ -9,12 +9,22 @@ from rest_framework.views import APIView
 from .pagination import StandardResultsSetPagination
 from reviews.models import Review
 from users.models import Profile
+from freelancer.permissions import (
+    IsCustomerOrReadOnly,
+    IsBusinessOrReadOnly,
+    IsOfferOwner,
+    IsBusinessForUpdateOrAdminForDelete,
+)
 
 
 class OrderListView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated, IsCustomerOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter(Q(customer_user=user) | (Q(business_user=user)))
 
     def post(self, request, *args, **kwargs):
         # Eingabe-Serializer validieren und Order erzeugen
@@ -29,10 +39,10 @@ class OrderListView(generics.ListCreateAPIView):
         return Response(output_serializer.data, status=status.HTTP_201_CREATED)
 
 
-class OrderDetailView(generics.RetrieveUpdateAPIView):
+class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsBusinessForUpdateOrAdminForDelete]
 
     def get(self, request, pk, *args, **kwargs):
         order = get_object_or_404(Order, pk=pk)
@@ -43,7 +53,7 @@ class OrderDetailView(generics.RetrieveUpdateAPIView):
 class OffersListView(generics.ListCreateAPIView):
     queryset = Offer.objects.prefetch_related("details").all()
     serializer_class = OfferSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsBusinessOrReadOnly]
     pagination_class = StandardResultsSetPagination
 
     def perform_create(self, serializer):
@@ -72,10 +82,10 @@ class OffersListView(generics.ListCreateAPIView):
         return qs
 
 
-class SingleOfferView(generics.RetrieveAPIView):
+class SingleOfferView(generics.RetrieveDestroyAPIView):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated, IsOfferOwner]
 
 
 class OfferDetailView(generics.RetrieveAPIView):
@@ -85,7 +95,7 @@ class OfferDetailView(generics.RetrieveAPIView):
 
 
 class OrderCountView(generics.RetrieveAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(
         self,
@@ -99,7 +109,7 @@ class OrderCountView(generics.RetrieveAPIView):
 
 
 class OrderCompletedView(generics.RetrieveAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(
         self,
@@ -115,15 +125,18 @@ class OrderCompletedView(generics.RetrieveAPIView):
 
 class BaseInfos(APIView):
     permission_classes = [permissions.AllowAny]
-    
 
     def get(self, request):
         review_count = Review.objects.count()
-        avg = Review.objects.aggregate(average_rating=models.Avg("rating"))["average_rating"] or 0
+        avg = (
+            Review.objects.aggregate(average_rating=models.Avg("rating"))[
+                "average_rating"
+            ]
+            or 0
+        )
         business_profile_count = Profile.objects.filter(user__type="business").count()
         offer_count = Offer.objects.count()
-        
-        
+
         data = {
             "review_count": review_count,
             "average_rating": avg,

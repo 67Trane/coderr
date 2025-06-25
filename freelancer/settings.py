@@ -28,26 +28,15 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# diesen bereich double check
 from corsheaders.defaults import default_methods
 
 CORS_ALLOW_METHODS = list(default_methods)
-# -> ['DELETE','GET','OPTIONS','PATCH','POST','PUT']
 
-# Erlaube nur deine lokale Angular-Origin (sicherer) oder (nur für Dev) ALLE Origins:
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",
-    # z. B. "http://localhost:4200" oder andere, je nachdem, wo du dein Frontend hostest.
 ]
-# (Optional, falls du Hunderte dynamischer Origins hast, kannst du in DEV auch
+
 CORS_ALLOW_ALL_ORIGINS = True
-# setzen, aber in Prod niemals.)
-
-# Standardmäßig deckt django-cors-headers schon Content-Type ab.
-# Falls du eigene Custom-Headers brauchst (z. B. Authorization, X-CSRFToken, …),
-# kannst du sie hier ergänzen:
-
-# bis hier
 
 
 # Application definition

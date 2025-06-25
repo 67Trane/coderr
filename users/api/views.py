@@ -37,19 +37,21 @@ class ProfileListView(generics.ListCreateAPIView):
 class ProfileDetailView(generics.RetrieveUpdateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
-    # def get_object(self):
-    #     obj=super().get_object()
-    #     if obj.user != self.request.user:
-    #         from rest_framework.exceptions import PermissionDenied
-    #         raise PermissionDenied("Du darfst nur dein eigenes Profil sehen b.z.w bearbeiten")
-    #     return obj
+    def update(self, request, *args, **kwargs):
+        if request.user.profile.id == int(kwargs["pk"]):
+            return super().update(request, *args, **kwargs)
+
+        return Response(
+            {"detail": "Du darfst nur dein eigenes Profil bearbeiten."},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
 
 class ProfileTypeListView(generics.ListAPIView):
     serializer_class = ProfileSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         profile_type = self.kwargs.get("profile_type")

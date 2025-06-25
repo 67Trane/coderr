@@ -3,7 +3,6 @@ from .views import *
 
 
 urlpatterns = [
-    
     path("orders/", OrderListView.as_view(), name="orders"),
     path("orders/<int:pk>/", OrderDetailView.as_view(), name="order-detail"),
     path("offers/", OffersListView.as_view(), name="offers"),
@@ -18,6 +17,5 @@ urlpatterns = [
         OrderCompletedView.as_view(),
         name="completed-order-count",
     ),
-    
     path("base-info/", BaseInfos.as_view(), name="base-infos"),
 ]
