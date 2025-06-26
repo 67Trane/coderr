@@ -1,103 +1,93 @@
-Coderr – Freelancer-App (Django + DRF)
-=====================================
+Coderr – Freelancer App (Django + DRF)
+======================================
 
-Beschreibung
-------------
-Coderr ist eine Freelancer-Plattform, entwickelt mit Django und Django REST Framework (DRF).
-Nutzer können sich als Kunde oder Anbieter registrieren, Projekte anlegen, Angebote erstellen und Bewertungen austauschen.
+Description
+-----------
+Coderr is a freelancer platform built with Django and Django REST Framework (DRF).
+Users can register as customers or freelancers, create projects, make offers, and exchange reviews.
 
 Features
 --------
-- REST-API mit Django REST Framework
-- Authentifizierung für Kunden und Freelancer
-- Gast-Login („customer“ & „business“) direkt nach Migration verfügbar
-- CRUD-Operationen für:
-  - Projekte
-  - Angebote
+- REST API with Django REST Framework
+- Authentication for customers and freelancers
+- Guest login ("customer" & "business") available immediately after migration
+- CRUD operations for:
+  - Projects
+  - Offers
   - Reviews
-- Berechtigungen: nur der Owner kann eigene Objekte ändern oder löschen
-- Automatisch angelegte Gast-Accounts für schnelles Testing
+- Permissions: only owners can modify or delete their own objects
+- Auto-generated guest accounts for easy testing
 
-Technologien & Voraussetzungen
-------------------------------
-- Python 3.9 oder neuer
+Technologies & Requirements
+---------------------------
+- Python 3.9 or higher
 - Django 4.x
 - Django REST Framework
-- SQLite (Standard) oder Postgres/MySQL
-- pip, virtualenv (empfohlen)
+- SQLite (default) or PostgreSQL/MySQL
+- pip, virtualenv (recommended)
 
 Installation & Setup
 --------------------
-1. Repository klonen
+1. Clone the repository
    git clone <REPO-URL>
    cd coderr-backend
 
-2. Virtual Environment anlegen & aktivieren
+2. Create & activate a virtual environment
    python -m venv env
    source env/bin/activate    # macOS/Linux
    env\Scripts\activate     # Windows
 
-3. Abhängigkeiten installieren
+3. Install dependencies
    pip install -r requirements.txt
 
-4. Umgebungsvariablen einrichten
-   Lege eine .env-Datei an mit:
-     SECRET_KEY=dein_geheimer_schluessel
-     DEBUG=True
-     DATABASE_URL=sqlite:///db.sqlite3
-
-5. Datenbank-Migrationen durchführen
+4. Run database migrations
    python manage.py makemigrations
    python manage.py migrate
 
-   Nach migrate werden zwei Gast-Accounts angelegt:
-     - Benutzername: customer  (als Gast-Kunde)
-     - Benutzername: business  (als Gast-Freelancer)
+   After migrate, two guest accounts are created:
+     - Username: kevin  (guest as a customer)
+     - Username: andrey  (guest as a freelancer)
 
-Server starten
---------------
+Starting the Server
+-------------------
 python manage.py runserver
 
-Die API ist dann erreichbar unter:
+The API will be available at:
 http://127.0.0.1:8000/api/
 
-Wichtige API-Endpunkte
------------------------
-- Authentifizierung:
+Key API Endpoints
+-----------------
+- Authentication:
   - POST /api/auth/login/
   - POST /api/auth/register/
-- Projekte:
+- Projects:
   - GET  /api/projects/
   - POST /api/projects/
   - GET  /api/projects/{id}/
   - PATCH/DELETE /api/projects/{id}/
-- Angebote:
+- Offers:
   - GET  /api/offers/
   - POST /api/offers/
-- Bewertungen (Reviews):
-  - GET  /api/reviews/    (liefert nur eigene Reviews)
+- Reviews:
+  - GET  /api/reviews/    (returns only your own reviews)
   - POST /api/reviews/
 
-Testing
+
+Deployment (Overview)
+---------------------
+- Recommended: Gunicorn + NGINX
+- Provide environment variables securely via server config or CI/CD
+- Optional: Docker Compose for local production-like setup
+
+Contributing
+------------
+1. Fork the repository
+2. Create a new branch (git checkout -b feature/my-idea)
+3. Commit your changes (git commit -m "Add ...")
+4. Push to your branch (git push origin feature/my-idea)
+5. Open a pull request
+
+License
 -------
-- Unit- und Integrationstests ausführen:
-  python manage.py test
-
-Deployment (Kurzüberblick)
---------------------------
-- Empfohlen: Gunicorn + NGINX
-- Umgebungsvariablen sicher über Server-Konfiguration oder CI/CD bereitstellen
-- Optional: Docker-Compose für lokale Produktivumgebung
-
-Beitragen
----------
-1. Fork erstellen
-2. Neuen Branch anlegen (git checkout -b feature/meine-idee)
-3. Änderungen committen (git commit -m "Add …")
-4. Push zum Branch (git push origin feature/meine-idee)
-5. Pull Request öffnen
-
-Lizenz
-------
-Dieses Projekt steht unter der MIT-Lizenz.
-Bitte siehe die Datei LICENSE für Details.
+This project is licensed under the MIT License.
+See the LICENSE file for details.
