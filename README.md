@@ -1,79 +1,79 @@
 # Coderr – Freelancer App (Django + DRF)
 
 ## 📝 Description
-Coderr ist eine Freelancer-Plattform, die mit **Django** und **Django REST Framework (DRF)** gebaut wurde.  
-Benutzer können sich als Kunde oder Freelancer registrieren, Projekte erstellen, Angebote abgeben und Bewertungen austauschen.
+Coderr is a freelancer platform built with **Django** and **Django REST Framework (DRF)**.  
+Users can register as customers or freelancers, create projects, submit offers, and exchange reviews.
 
 ---
 
 ## 🚀 Features
-- ✅ REST API mit Django REST Framework  
-- 🔐 Authentifizierung für Kunden und Freelancer  
-- 👥 Gast-Login (`"customer"` & `"freelancer"`) sofort nach Migration verfügbar  
-- ✍️ CRUD-Operationen für:
-  - Projekte
-  - Angebote
-  - Bewertungen
-- 🔒 Berechtigungen: Nur Eigentümer können ihre Objekte bearbeiten oder löschen  
-- 🧪 Automatisch generierte Gast-Accounts zum Testen
+- ✅ REST API using Django REST Framework  
+- 🔐 Authentication for both customers and freelancers  
+- 👥 Guest login (`"customer"` & `"freelancer"`) available after migrations  
+- ✍️ Full CRUD functionality for:
+  - Projects
+  - Offers
+  - Reviews
+- 🔒 Permissions: only owners can edit or delete their own objects  
+- 🧪 Auto-generated guest accounts for testing
 
 ---
 
-## 🛠️ Technologien & Voraussetzungen
-- Python **3.9 oder höher**  
+## 🛠️ Technologies & Requirements
+- Python **3.9 or higher**  
 - Django **4.x**  
 - Django REST Framework  
-- **SQLite** (Standard) oder **PostgreSQL/MySQL**  
-- `pip`, `virtualenv` (empfohlen)
+- **SQLite** (default) or **PostgreSQL/MySQL**  
+- `pip`, `virtualenv` (recommended)
 
 ---
 
 ## ⚙️ Installation & Setup
 
 ```bash
-# 1. Repository klonen
+# 1. Clone the repository
 git clone <REPO-URL>
 cd coderr-backend
 
-# 2. Virtuelle Umgebung erstellen & aktivieren
+# 2. Create and activate a virtual environment
 python -m venv env
 source env/bin/activate    # macOS/Linux
-env\Scripts\activate       # Windows
+env\Scripts\activate     # Windows
 
-# 3. Abhängigkeiten installieren
+# 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Migrationen ausführen
+# 4. Apply database migrations
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-> Nach der Migration werden zwei Gast-Accounts erstellt:
-> - Benutzername: `kevin`  (Gastkunde)  
-> - Benutzername: `andrey` (Gastfreelancer)
+> After migration, two guest accounts will be created:
+> - Username: `kevin`  (guest customer)  
+> - Username: `andrey` (guest freelancer)
 
 ---
 
-## ▶️ Server starten
+## ▶️ Starting the Server
 
 ```bash
 python manage.py runserver
 ```
 
-Die API ist dann erreichbar unter:  
+API will be accessible at:  
 👉 http://127.0.0.1:8000/api/
 
 ---
 
-## 📡 Wichtige API-Endpunkte
+## 📡 Key API Endpoints
 
-### 🔐 Authentifizierung
+### 🔐 Authentication
 ```http
 POST /api/auth/login/
 POST /api/auth/register/
 ```
 
-### 📁 Projekte
+### 📁 Projects
 ```http
 GET    /api/projects/
 POST   /api/projects/
@@ -82,45 +82,45 @@ PATCH  /api/projects/{id}/
 DELETE /api/projects/{id}/
 ```
 
-### 💼 Angebote
+### 💼 Offers
 ```http
 GET  /api/offers/
 POST /api/offers/
 ```
 
-### 🌟 Bewertungen
+### 🌟 Reviews
 ```http
-GET  /api/reviews/        # zeigt nur deine eigenen Bewertungen
+GET  /api/reviews/        # returns only your own reviews
 POST /api/reviews/
 ```
 
 ---
 
-## 🚢 Deployment (Überblick)
-- Empfohlen: **Gunicorn + NGINX**
-- Umgebungsvariablen sicher über Server-Konfiguration oder CI/CD bereitstellen
-- Optional: **Docker Compose** für produktionsähnliches lokales Setup
+## 🚢 Deployment (Overview)
+- Recommended: **Gunicorn + NGINX**
+- Provide environment variables securely via server config or CI/CD
+- Optional: **Docker Compose** for local production-like setup
 
 ---
 
-## 🤝 Mitwirken
-1. Repository forken  
-2. Neuen Branch erstellen:
+## 🤝 Contributing
+1. Fork the repository  
+2. Create a new branch:
    ```bash
-   git checkout -b feature/meine-idee
+   git checkout -b feature/my-idea
    ```
-3. Änderungen committen:
+3. Commit your changes:
    ```bash
    git commit -m "Add ..."
    ```
-4. Branch pushen:
+4. Push to your branch:
    ```bash
-   git push origin feature/meine-idee
+   git push origin feature/my-idea
    ```
-5. Pull Request öffnen
+5. Open a pull request
 
 ---
 
-## 📄 Lizenz
-Dieses Projekt steht unter der **MIT License**.  
-Siehe die Datei `LICENSE` für Details.
+## 📄 License
+This project is licensed under the **MIT License**.  
+See the `LICENSE` file for more details.
