@@ -23,7 +23,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     location = serializers.CharField(required=False, allow_null=True)
     tel = serializers.CharField(required=False, allow_null=True)
     description = serializers.CharField(required=False, allow_null=True)
-    working_hours = serializers.IntegerField(required=False)
+    working_hours = serializers.CharField(required=False)
 
     class Meta:
         model = Profile

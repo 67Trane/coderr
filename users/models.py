@@ -22,7 +22,7 @@ class Profile(models.Model):
         max_length=30, blank=True, help_text="Telefonnummer z.B. +49 123 4567 890"
     )
     description = models.TextField(blank=True, help_text="Beschreibung oder Bio")
-    working_hours = models.IntegerField(default=0, help_text="Arbeitsstunden")
+    working_hours = models.CharField(help_text="Arbeitsstunden")
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 

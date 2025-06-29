@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from marktplace.models import *
+from users.models import User
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -35,6 +36,11 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class UserDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username']
+
 class OfferDetailSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name="offerdetails-details", lookup_field="pk"
@@ -45,21 +51,29 @@ class OfferDetailSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "url",
+        ]
+
+
+class OfferSingleDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OfferDetail
+        fields = [
+            "id",
             "title",
             "revisions",
             "delivery_time_in_days",
             "price",
             "features",
             "offer_type",
-            "business_user",
         ]
-
 
 class OfferSerializer(serializers.ModelSerializer):
     details = OfferDetailSerializer(many=True)
     user = serializers.IntegerField(source="business_user.id", read_only=True)
-    customer_user = serializers.PrimaryKeyRelatedField(read_only=True)
     business_user = serializers.PrimaryKeyRelatedField(read_only=True)
+    user_details = UserDetailsSerializer(source="business_user", read_only = True)
+    min_price= serializers.IntegerField(read_only = True)
+    min_delivery_time = serializers.IntegerField(read_only = True)
 
     class Meta:
         model = Offer
@@ -71,12 +85,16 @@ class OfferSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "image",
-            "customer_user",
             "business_user",
             "details",
+            "min_price",
+            "min_delivery_time",
+            "user_details"
         ]
 
+
     def create(self, validated_data):
+        
         details_data = validated_data.pop("details", [])
         offer = Offer.objects.create(**validated_data)
         for detail in details_data:
@@ -88,7 +106,7 @@ class OfferSerializer(serializers.ModelSerializer):
 
         for attr, val in validated_data.items():
             setattr(instance, attr, val)
-        instance.save()
+        instance.save() 
 
         if details_data is not None:
             instance.details.all().delete()

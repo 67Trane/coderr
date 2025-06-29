@@ -53,6 +53,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="profile",
             name="working_hours",
-            field=models.IntegerField(default=0, help_text="Arbeitsstunden"),
+            field=models.CharField(default=0, help_text="Arbeitsstunden"),
         ),
     ]

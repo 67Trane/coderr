@@ -15,13 +15,6 @@ STATUS_TYPES = (
 
 
 class Offer(models.Model):
-    customer_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="offer_as_customer",
-        limit_choices_to={"type": "customer"},
-    )
     business_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -34,6 +27,7 @@ class Offer(models.Model):
     description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
+    user_details = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
 
 
 class OfferDetail(models.Model):

@@ -15,6 +15,8 @@ from freelancer.permissions import (
     IsOfferOwner,
     IsBusinessForUpdateOrAdminForDelete,
 )
+from django.db.models import Min, Max
+from rest_framework.exceptions import ParseError
 
 
 class OrderListView(generics.ListCreateAPIView):
@@ -79,10 +81,20 @@ class OffersListView(generics.ListCreateAPIView):
         else:
             qs = qs.order_by("-created_at")
 
+        qs = qs.annotate(min_price=Min("details__price"))
+        qs = qs.annotate(min_delivery_time=Min(
+            "details__delivery_time_in_days"))
+
+        delivery_max = params.get("max_delivery_time")
+        if delivery_max:
+            if not delivery_max.isdigit():
+                raise ParseError("`max_delivery_time` must be an integer.")
+            qs = qs.filter(min_delivery_time__lte=int(delivery_max))
+
         return qs
 
 
-class SingleOfferView(generics.RetrieveDestroyAPIView):
+class SingleOfferView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
     permission_classes = [permissions.IsAuthenticated, IsOfferOwner]
@@ -93,6 +105,13 @@ class OfferDetailView(generics.RetrieveAPIView):
     serializer_class = OfferDetailSerializer
     permission_classes = [permissions.AllowAny]
 
+
+class OfferSingleDetailView(generics.RetrieveAPIView):
+    queryset = OfferDetail.objects.all()
+    serializer_class = OfferSingleDetailSerializer
+    permission_classes = [permissions.AllowAny]
+
+    
 
 class OrderCountView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -134,7 +153,8 @@ class BaseInfos(APIView):
             ]
             or 0
         )
-        business_profile_count = Profile.objects.filter(user__type="business").count()
+        business_profile_count = Profile.objects.filter(
+            user__type="business").count()
         offer_count = Offer.objects.count()
 
         data = {
