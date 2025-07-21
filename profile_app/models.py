@@ -21,11 +21,3 @@ class Profile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class GuestCustomer(models.Model):
-    username = models.CharField(max_length=200, default="andrey")
-    password = models.CharField(max_length=200, default="asdasd")
-
-
-class GuestBusiness(models.Model):
-    username = models.CharField(max_length=200, default="kevin")
-    password = models.CharField(max_length=200, default="asdasd24")
