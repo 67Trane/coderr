@@ -1,11 +1,11 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from .serializers import ReviewSerializer
-from reviews.models import Review
+from reviews_app.models import Review
 from rest_framework import permissions
 from rest_framework import status
-from marktplace.models import Offer
-from freelancer.permissions import IsCustomerOrReadOnly, IsReviewer
+from orders_app.models import Offer
+from core.permissions import IsCustomerOrReadOnly, IsReviewer
 
 
 class ReviewView(generics.ListCreateAPIView):

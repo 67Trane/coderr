@@ -1,15 +1,15 @@
 from rest_framework import generics, status
 from django.db.models import Q
-from marktplace.models import *
+from orders_app.models import *
 from .serializers import *
 from rest_framework import permissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from .pagination import StandardResultsSetPagination
-from reviews.models import Review
-from users.models import Profile
-from freelancer.permissions import (
+from reviews_app.models import Review
+from profile_app.models import Profile
+from core.permissions import (
     IsCustomerOrReadOnly,
     IsBusinessOrReadOnly,
     IsOfferOwner,

@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from reviews.models import Review
-from users.models import User
+from reviews_app.models import Review
+from profile_app.models import User
 
 
 class ReviewSerializer(serializers.ModelSerializer):

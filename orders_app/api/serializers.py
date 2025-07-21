@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from marktplace.models import *
-from users.models import User
+from orders_app.models import *
+from profile_app.models import User
 
 
 class OrderSerializer(serializers.ModelSerializer):

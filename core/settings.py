@@ -43,7 +43,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 INSTALLED_APPS = [
     "corsheaders",
-    "users",
+    "profile_app",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -52,8 +52,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework.authtoken",
-    "marktplace",
-    "reviews",
+    "orders_app",
+    "offers_app",
+    "reviews_app",
 ]
 
 MIDDLEWARE = [
