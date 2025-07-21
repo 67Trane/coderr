@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "orders_app",
     "offers_app",
     "reviews_app",
+    "authentication_app",
 ]
 
 MIDDLEWARE = [
@@ -151,4 +152,4 @@ REST_FRAMEWORK = {
     ],
 }
 
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "authentication_app.User"

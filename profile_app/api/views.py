@@ -1,5 +1,6 @@
 from rest_framework import viewsets
-from profile_app.models import User, Profile
+from profile_app.models import Profile
+from authentication_app.models import User
 from .serializers import (
     UserSerializer,
     RegistrationSerializer,

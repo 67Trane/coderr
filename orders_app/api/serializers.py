@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from orders_app.models import *
-from profile_app.models import User
+from authentication_app.models import User
 
 
 class OrderSerializer(serializers.ModelSerializer):
