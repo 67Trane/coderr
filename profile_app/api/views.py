@@ -33,7 +33,3 @@ class ProfileTypeListView(generics.ListAPIView):
     def get_queryset(self):
         profile_type = self.kwargs.get("profile_type")
         return Profile.objects.filter(user__type=profile_type)
-
-
-
-

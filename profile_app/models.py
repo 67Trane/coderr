@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from core.settings import AUTH_USER_MODEL
 
+
 class Profile(models.Model):
     user = models.OneToOneField(
         AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile", default=1
@@ -19,5 +20,3 @@ class Profile(models.Model):
     working_hours = models.CharField(help_text="Arbeitsstunden")
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-

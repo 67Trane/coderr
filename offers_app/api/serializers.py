@@ -6,7 +6,7 @@ from authentication_app.models import User
 class UserDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username']
+        fields = ["first_name", "last_name", "username"]
 
 
 class OfferDetailSerializer(serializers.ModelSerializer):
@@ -40,8 +40,7 @@ class OfferSerializer(serializers.ModelSerializer):
     details = OfferSingleDetailSerializer(many=True)
     user = serializers.IntegerField(source="business_user.id", read_only=True)
     business_user = serializers.PrimaryKeyRelatedField(read_only=True)
-    user_details = UserDetailsSerializer(
-        source="business_user", read_only=True)
+    user_details = UserDetailsSerializer(source="business_user", read_only=True)
     min_price = serializers.IntegerField(read_only=True)
     min_delivery_time = serializers.IntegerField(read_only=True)
 
@@ -59,7 +58,7 @@ class OfferSerializer(serializers.ModelSerializer):
             "details",
             "min_price",
             "min_delivery_time",
-            "user_details"
+            "user_details",
         ]
 
     def create(self, validated_data):

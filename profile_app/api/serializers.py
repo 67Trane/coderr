@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from profile_app.models import  Profile
+from profile_app.models import Profile
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.IntegerField(source="user.id", read_only=True)
@@ -15,6 +16,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     tel = serializers.CharField(required=False, allow_null=True)
     description = serializers.CharField(required=False, allow_null=True)
     working_hours = serializers.CharField(required=False)
+
     class Meta:
         model = Profile
         fields = [
@@ -56,5 +58,3 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
-
-

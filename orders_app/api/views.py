@@ -47,9 +47,6 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
-    
-
 class OrderCountView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -77,5 +74,3 @@ class OrderCompletedView(generics.RetrieveAPIView):
         data = {"completed_order_count": count}
 
         return Response(data, status=status.HTTP_200_OK)
-
-

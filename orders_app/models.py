@@ -29,12 +29,9 @@ class Order(models.Model):
     title = models.CharField(max_length=255, null=True, blank=True)
     revisions = models.PositiveIntegerField(default=0)
     delivery_time_in_days = models.IntegerField(null=True, blank=True)
-    price = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     features = models.JSONField(default=list, blank=True)
-    offer_type = models.CharField(
-        max_length=10, null=True, blank=True
-    )
+    offer_type = models.CharField(max_length=10, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(

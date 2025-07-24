@@ -19,8 +19,7 @@ class BaseInfos(APIView):
             ]
             or 0
         )
-        business_profile_count = Profile.objects.filter(
-            user__type="business").count()
+        business_profile_count = Profile.objects.filter(user__type="business").count()
         offer_count = Offer.objects.count()
 
         data = {

@@ -22,12 +22,12 @@ class Offer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     user_details = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+    )
 
 
 class OfferDetail(models.Model):
-    offer = models.ForeignKey(
-        Offer, on_delete=models.CASCADE, related_name="details")
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE, related_name="details")
     title = models.CharField(max_length=255, null=True, blank=True)
     revisions = models.PositiveIntegerField(default=0)
     delivery_time_in_days = models.IntegerField()

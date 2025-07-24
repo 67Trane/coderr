@@ -4,13 +4,12 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = "__all__"
-        
-        
+
+
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     user_id = serializers.IntegerField(source="id", read_only=True)
