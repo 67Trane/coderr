@@ -1,18 +1,8 @@
-from rest_framework import viewsets
 from profile_app.models import Profile
-from authentication_app.models import User
-from .serializers import (
-    UserSerializer,
-    RegistrationSerializer,
-    ProfileSerializer,
-    LoginSerializer,
-)
+from .serializers import ProfileSerializer
 from rest_framework import generics
-from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import permissions, status
-from rest_framework.views import APIView
-from django.contrib.auth import authenticate
 
 
 class ProfileListView(generics.ListCreateAPIView):
