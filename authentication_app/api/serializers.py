@@ -1,4 +1,4 @@
-from models import User
+from authentication_app.models import User
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate

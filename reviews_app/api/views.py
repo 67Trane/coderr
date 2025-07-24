@@ -1,10 +1,7 @@
 from rest_framework import generics
-from rest_framework.response import Response
 from .serializers import ReviewSerializer
 from reviews_app.models import Review
 from rest_framework import permissions
-from rest_framework import status
-from orders_app.models import Offer
 from core.permissions import IsCustomerOrReadOnly, IsReviewer
 
 

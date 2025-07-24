@@ -1,9 +1,7 @@
-from models import User
-from serializers import UserSerializer, LoginSerializer, RegistrationSerializer
+from .serializers import UserSerializer, LoginSerializer, RegistrationSerializer
 from profile_app.models import Profile
-from rest_framework import viewsets, permissions, generics, status
+from rest_framework import permissions, generics, status
 from authentication_app.models import User
-from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
