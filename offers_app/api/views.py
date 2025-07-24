@@ -41,9 +41,10 @@ class OffersListView(generics.ListCreateAPIView):
         else:
             qs = qs.order_by("-created_at")
 
-        qs = qs.annotate(min_price=Min("details__price"))
-        qs = qs.annotate(min_delivery_time=Min(
-            "details__delivery_time_in_days"))
+        qs = qs.annotate(
+            min_price=Min("details__price"),
+            min_delivery_time=Min("details__delivery_time_in_days")
+        )
 
         delivery_max = params.get("max_delivery_time")
         if delivery_max:

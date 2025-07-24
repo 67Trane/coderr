@@ -37,7 +37,7 @@ class OfferSingleDetailSerializer(serializers.ModelSerializer):
 
 
 class OfferSerializer(serializers.ModelSerializer):
-    details = OfferDetailSerializer(many=True)
+    details = OfferSingleDetailSerializer(many=True)
     user = serializers.IntegerField(source="business_user.id", read_only=True)
     business_user = serializers.PrimaryKeyRelatedField(read_only=True)
     user_details = UserDetailsSerializer(
