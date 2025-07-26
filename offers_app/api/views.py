@@ -52,13 +52,24 @@ class OffersListView(generics.ListCreateAPIView):
                 raise ParseError("`max_delivery_time` must be an integer.")
             qs = qs.filter(min_delivery_time__lte=int(delivery_max))
 
+        min_price = params.get("min_price")
+        if min_price:
+            if not min_price.isdigit():
+                raise ParseError("`min_price` must be an integer.")
+            qs = qs.filter(min_price__gte=int(min_price))
+
         return qs
 
 
 class SingleOfferView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Offer.objects.all()
     serializer_class = OfferSerializer
     permission_classes = [permissions.IsAuthenticated, IsOfferOwner]
+    
+    def get_queryset(self):
+        return Offer.objects.annotate(
+            min_price=Min("details__price"),
+            min_delivery_time=Min("details__delivery_time_in_days"),
+        )
 
 
 class OfferDetailView(generics.RetrieveAPIView):
