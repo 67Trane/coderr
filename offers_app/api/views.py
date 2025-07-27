@@ -10,6 +10,8 @@ from core.permissions import (
 )
 from django.db.models import Min, Max
 from rest_framework.exceptions import ParseError
+from django.http import Http404
+from rest_framework.exceptions import PermissionDenied
 
 
 class OffersListView(generics.ListCreateAPIView):
@@ -71,7 +73,13 @@ class SingleOfferView(generics.RetrieveUpdateDestroyAPIView):
             min_delivery_time=Min("details__delivery_time_in_days"),
         )
 
-
+    def get_object(self):
+        try:
+            obj = super().get_object()
+        except Http404:
+            raise PermissionDenied("You do not have permission to perform this action.")
+        return obj
+    
 class OfferDetailView(generics.RetrieveAPIView):
     queryset = OfferDetail.objects.all()
     serializer_class = OfferDetailSerializer
