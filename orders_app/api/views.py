@@ -12,6 +12,7 @@ from core.permissions import (
     IsCustomerOrReadOnly,
     IsBusinessForUpdateOrAdminForDelete,
 )
+from authentication_app.models import User
 
 
 class OrderListView(generics.ListCreateAPIView):
@@ -55,6 +56,7 @@ class OrderCountView(generics.RetrieveAPIView):
         request,
         pk,
     ):
+        get_object_or_404(User, pk=pk, type="business")
         count = Order.objects.filter(business_user=pk).count()
         data = {"order_count": count}
 
@@ -69,8 +71,8 @@ class OrderCompletedView(generics.RetrieveAPIView):
         request,
         pk,
     ):
+        get_object_or_404(User, pk=pk, type="business")
         current_user = Order.objects.filter(business_user=pk)
         count = current_user.filter(status="completed").count()
         data = {"completed_order_count": count}
-
         return Response(data, status=status.HTTP_200_OK)
