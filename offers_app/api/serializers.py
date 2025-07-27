@@ -23,6 +23,8 @@ class OfferDetailSerializer(serializers.ModelSerializer):
 
 
 class OfferSingleDetailSerializer(serializers.ModelSerializer):
+    offer_type = serializers.CharField(required=True)
+
     class Meta:
         model = OfferDetail
         fields = [
@@ -40,7 +42,8 @@ class OfferSerializer(serializers.ModelSerializer):
     details = OfferSingleDetailSerializer(many=True)
     user = serializers.IntegerField(source="business_user.id", read_only=True)
     business_user = serializers.PrimaryKeyRelatedField(read_only=True)
-    user_details = UserDetailsSerializer(source="business_user", read_only=True)
+    user_details = UserDetailsSerializer(
+        source="business_user", read_only=True)
     min_price = serializers.IntegerField(read_only=True)
     min_delivery_time = serializers.IntegerField(read_only=True)
 

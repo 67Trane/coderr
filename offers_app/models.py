@@ -30,7 +30,7 @@ class OfferDetail(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE, related_name="details")
     title = models.CharField(max_length=255, null=True, blank=True)
     revisions = models.PositiveIntegerField(default=0)
-    delivery_time_in_days = models.IntegerField()
+    delivery_time_in_days = models.IntegerField(null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     features = models.JSONField(default=list, blank=True)
     offer_type = models.CharField(max_length=10, choices=OFFER_TYPES)
