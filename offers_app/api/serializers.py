@@ -85,3 +85,11 @@ class OfferSerializer(serializers.ModelSerializer):
                 OfferDetail.objects.create(offer=instance, **detail)
 
         return instance
+
+    def validate_details(self, value):
+        for idx, detail in enumerate(value):
+            if not detail.get("offer_type"):
+                raise serializers.ValidationError({
+                    idx: "This detail is missing the required field 'offer_type'."
+                })
+        return value
