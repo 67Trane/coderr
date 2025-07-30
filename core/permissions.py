@@ -1,4 +1,6 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
+from orders_app.models import Order
+from rest_framework.exceptions import NotFound
 
 
 class IsCustomerOrReadOnly(BasePermission):
