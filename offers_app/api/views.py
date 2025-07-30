@@ -12,6 +12,7 @@ from django.db.models import Min, Max
 from rest_framework.exceptions import ParseError
 from django.http import Http404
 from rest_framework.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404
 
 
 class OffersListView(generics.ListCreateAPIView):
@@ -65,13 +66,19 @@ class OffersListView(generics.ListCreateAPIView):
 
 class SingleOfferView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = OfferSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOfferOwner]
-    
+    permission_classes = [permissions.IsAuthenticated | IsOfferOwner]
+
     def get_queryset(self):
         return Offer.objects.annotate(
             min_price=Min("details__price"),
             min_delivery_time=Min("details__delivery_time_in_days"),
         )
+
+    def destroy(self, request, *args, **kwargs):
+        if getattr(request.user, "type", None) != "business":
+            raise PermissionDenied("You do not have permission to delete offers.")
+
+        return super().destroy(request, *args, **kwargs)
     
 class OfferDetailView(generics.RetrieveAPIView):
     queryset = OfferDetail.objects.all()
