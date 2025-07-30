@@ -72,13 +72,6 @@ class SingleOfferView(generics.RetrieveUpdateDestroyAPIView):
             min_price=Min("details__price"),
             min_delivery_time=Min("details__delivery_time_in_days"),
         )
-
-    def get_object(self):
-        try:
-            obj = super().get_object()
-        except Http404:
-            raise PermissionDenied("You do not have permission to perform this action.")
-        return obj
     
 class OfferDetailView(generics.RetrieveAPIView):
     queryset = OfferDetail.objects.all()

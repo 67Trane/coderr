@@ -57,7 +57,7 @@ class OrderCountView(generics.RetrieveAPIView):
         pk,
     ):
         get_object_or_404(User, pk=pk, type="business")
-        count = Order.objects.filter(business_user=pk).count()
+        count = Order.objects.filter(business_user=pk, status="in_progress").count()
         data = {"order_count": count}
 
         return Response(data, status=status.HTTP_200_OK)
