@@ -25,7 +25,9 @@ SECRET_KEY = "django-insecure-8!vlhwf_)724@c!p1geeno2r!g%i!0=bzxa)s(nbuldt5rkjy2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '192.168.2.148'
+]
 
 
 from corsheaders.defaults import default_methods
