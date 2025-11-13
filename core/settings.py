@@ -35,6 +35,10 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://coderr-api.mehmet-deliaci.net",
+    "https://mehmet-deliaci.net",
+]
 
 CORS_ALLOW_METHODS = list(default_methods)
 
