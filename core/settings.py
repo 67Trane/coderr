@@ -38,6 +38,8 @@ ALLOWED_HOSTS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://coderr-api.mehmet-deliaci.net",
     "https://mehmet-deliaci.net",
+    "https://localhost",
+    "https://127.0.0.1",
 ]
 
 CORS_ALLOW_METHODS = list(default_methods)
